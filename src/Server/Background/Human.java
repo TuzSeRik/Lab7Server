@@ -1,4 +1,4 @@
-package Main;
+package Server.Background;
 
 class Human extends Person {
     private String name;

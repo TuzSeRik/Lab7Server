@@ -1,4 +1,4 @@
-package Environment;
+package Server.Background;
 
 public interface Repairable {
     void Break();

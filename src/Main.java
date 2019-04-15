@@ -1,10 +1,12 @@
-package Main;
+import Server.Background.Collection;
+import Server.Background.Furnace;
+import Server.Background.Human;
+import Server.Background.Shorty;
 
-import IO.Collection;
 import java.util.Scanner;
 
 /*
-import IO.JSON;
+import Server.Background.JSON;
 import java.util.Comparator;
 import java.util.Date;
 */

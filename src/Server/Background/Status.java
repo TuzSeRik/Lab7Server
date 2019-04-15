@@ -1,4 +1,4 @@
-package Environment;
+package Server.Background;
 
 public enum Status {
     NONE,

@@ -1,6 +1,5 @@
-package Main;
+package Server.Background;
 
-import Environment.Status;
 import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;
 import java.util.Date;

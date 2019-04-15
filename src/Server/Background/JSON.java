@@ -1,6 +1,6 @@
-package IO;
+package Server.Background;
 
-import Main.Shorty;
+import Server.Background.Shorty;
 import com.google.gson.Gson;
 
 public class JSON {

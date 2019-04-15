@@ -1,7 +1,8 @@
-package Main;
+package Server.Background;
 
-import Environment.Repairable;
-import Environment.Status;
+import Server.Background.Furnace;
+import Server.Background.Repairable;
+import Server.Background.Status;
 
 public abstract class Person {
 

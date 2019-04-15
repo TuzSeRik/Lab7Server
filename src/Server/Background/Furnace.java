@@ -1,4 +1,4 @@
-package Main;
+package Server.Background;
 
 class Furnace {
     private Food food;
