@@ -1,9 +1,9 @@
 package Server.Background;
 
-class Furnace {
+public class Furnace {
     private Food food;
 
-    Furnace(String name, int quantity) {
+    public Furnace(String name, int quantity) {
         food = new Food(name, quantity);
     }
 
@@ -11,7 +11,7 @@ class Furnace {
         food.decreaseQuantity();
     }
 
-    int getQuantity(){
+    public int getQuantity(){
         return food.quantity;
     }
 

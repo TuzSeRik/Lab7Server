@@ -1,9 +1,9 @@
 package Server.Background;
 
-class Human extends Person {
+public class Human extends Person {
     private String name;
 
-    Human(String name, int heigth, int weigth, String CName, Integer hp){
+    public Human(String name, int heigth, int weigth, String CName, Integer hp){
         super(heigth, CName, hp);
         this.name = name;
     }
@@ -13,7 +13,7 @@ class Human extends Person {
     }
 
     @Override
-    void takeFood(Furnace furnace){
+    public void takeFood(Furnace furnace){
         throw new RuntimeException();
     }
 }

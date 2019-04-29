@@ -1,9 +1,5 @@
 package Server.Background;
 
-import Server.Background.Furnace;
-import Server.Background.Repairable;
-import Server.Background.Status;
-
 public abstract class Person {
 
     private Status status = Status.NONE;

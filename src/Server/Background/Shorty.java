@@ -37,7 +37,7 @@ public class Shorty extends Person implements Comparable {
         cloth = new Cloth(CN,CHP);
     }
 
-    void Beat(Shorty shorty){
+    public void Beat(Shorty shorty){
         isWinner = false;
         if(shorty.getStatus()!= Status.REPAIRING){
             shorty.recieveDamage();
@@ -54,7 +54,7 @@ public class Shorty extends Person implements Comparable {
         cloth.Break();
     }
 
-    void Laugh(Human human){
+    public void Laugh(Human human){
         System.out.println(this.getName()+" засмеялся над "+human.getName());
     }
 
@@ -65,14 +65,14 @@ public class Shorty extends Person implements Comparable {
         isWinner = true;
     }
 
-    void Buzz(Shorty shorty){
+    public void Buzz(Shorty shorty){
         if (this.getStatus() != Status.REPAIRING) {
             this.setStatus(Status.BUZZING);
             System.out.println(this.getName()+" одобрительно загудел в сторону "+shorty.getName());
         }
     }
 
-    boolean getIsWinner(){
+    public boolean getIsWinner(){
         return isWinner;
     }
 
@@ -93,7 +93,7 @@ public class Shorty extends Person implements Comparable {
     }
 
     @Override
-    void takeFood(Furnace furnace){
+    public void takeFood(Furnace furnace){
         furnace.foodTaken();
         foodCount++;
         System.out.println(this.getName()+" взял "+furnace.getName());
