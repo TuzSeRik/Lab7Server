@@ -1,9 +1,7 @@
-package Server;
-
-import Server.Background.CSV;
-import Server.Background.JSON;
-import Server.Background.Shorty;
-import Server.Background.Status;
+import Background.CSV;
+import Background.JSON;
+import Background.Shorty;
+import Background.Status;
 import net.sf.jsefa.DeserializationException;
 import java.io.*;
 import java.text.DateFormat;
