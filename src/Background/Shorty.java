@@ -2,6 +2,9 @@ package Background;
 
 import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 
 @CsvDataType()
@@ -37,38 +40,38 @@ public class Shorty extends Person implements Comparable {
         cloth = new Cloth(CN,CHP);
     }
 
-    public void Beat(Shorty shorty){
+    public void Beat(Shorty shorty, ObjectOutputStream os) throws IOException{
         isWinner = false;
         if(shorty.getStatus()!= Status.REPAIRING){
             shorty.recieveDamage();
             if (shorty.getStatus() != Status.NONE) shorty.recieveDamage();
             if (shorty.cloth.getIsBroke()) {
-                Laugh(shorty);
-                System.out.println(this.getName()+" засмеялся над "+shorty.getName());
+                Laugh(shorty, os);
+                os.writeUTF(this.getName()+" засмеялся над "+shorty.getName());
             }
         }
-        System.out.println(this.getName()+" ударил "+shorty.getName());
+       os.writeUTF(this.getName()+" ударил "+shorty.getName());
     }
 
     private void recieveDamage() throws NullPointerException{
         cloth.Break();
     }
 
-    public void Laugh(Human human){
-        System.out.println(this.getName()+" засмеялся над "+human.getName());
+    public void Laugh(Human human, ObjectOutputStream os) throws IOException{
+        os.writeUTF(this.getName()+" засмеялся над "+human.getName());
     }
 
-    private void Laugh(Shorty shorty){
-        System.out.println(shorty.getName()+" начал ремонтировать "+shorty.cloth.getName());
+    private void Laugh(Shorty shorty, ObjectOutputStream os) throws IOException{
+        os.writeUTF(shorty.getName()+" начал ремонтировать "+shorty.cloth.getName());
         shorty.setStatus(Status.REPAIRING);
         this.setStatus(Status.LAUGHING);
         isWinner = true;
     }
 
-    public void Buzz(Shorty shorty){
+    public void Buzz(Shorty shorty, ObjectOutputStream os) throws  IOException{
         if (this.getStatus() != Status.REPAIRING) {
             this.setStatus(Status.BUZZING);
-            System.out.println(this.getName()+" одобрительно загудел в сторону "+shorty.getName());
+            os.writeUTF(this.getName()+" одобрительно загудел в сторону "+shorty.getName());
         }
     }
 
@@ -93,10 +96,10 @@ public class Shorty extends Person implements Comparable {
     }
 
     @Override
-    public void takeFood(Furnace furnace){
+    public void takeFood(Furnace furnace, ObjectOutputStream os) throws IOException{
         furnace.foodTaken();
         foodCount++;
-        System.out.println(this.getName()+" взял "+furnace.getName());
+        os.writeUTF(this.getName()+" взял "+furnace.getName());
     }
 
     @Override

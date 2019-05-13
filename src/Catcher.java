@@ -1,7 +1,9 @@
 import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 
 public class Catcher extends Thread {
     private FileChannel channel;
@@ -56,8 +58,9 @@ public class Catcher extends Thread {
                 }
 
                 if (input.contains("start")) {
-
-
+                    Simulation simulation = new Simulation(collection);
+                    simulation.simulate(to);
+                    to.flush();
                 }
 
                 if (input.contains("remove_last")) {
@@ -87,12 +90,12 @@ public class Catcher extends Thread {
                     to.flush();
                 }
 
-/*            if (input.contains("import")) {
-                socket.read(buffer);
-                String[] strings = StandardCharsets.UTF_8.decode(buffer).toString().split(" ");
-                channel.write(StandardCharsets.UTF_8.encode(strings[1]));
-                to.writeUTF("Коллекция успешно импортирована!"));
-            }*/
+                if (input.contains("import")) {
+                    String s = from.readUTF();
+                    channel.write(StandardCharsets.UTF_8.encode(s));
+                    to.writeUTF("Коллекция успешно импортирована!");
+                    to.flush();
+                }
 
                 if (input.contains("overwrite")) {
                     collection.commands.save();
@@ -100,15 +103,25 @@ public class Catcher extends Thread {
                     to.flush();
                 }
 
-/*            if (input.contains("save")) {
-                channel.read(buffer);
-                socket.write(ByteBuffer.allocate(64*1024).put(buffer).put(StandardCharsets.UTF_8.encode("Коллекция успешно сохранена на клиенте!")));
-            }*/
+                if (input.contains("save")) {
+                    ByteBuffer bb = ByteBuffer.allocate(32 * 1024);
+                    try {
+                        channel.read(bb);
+                        to.writeUTF(StandardCharsets.UTF_8.decode(bb).toString());
+                        to.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
 
                 if (input.contains("quitAll")) {
                     to.writeUTF("Сервер завершил работу!");
                     to.flush();
-                    throw new EOFException();
+                    to.close();
+                    from.close();
+                    channel.close();
+                    System.exit(0);
                 }}
         } catch (IOException e) {
             e.printStackTrace();

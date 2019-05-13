@@ -1,5 +1,8 @@
 package Background;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 public abstract class Person {
 
     private Status status = Status.NONE;
@@ -32,7 +35,7 @@ public abstract class Person {
         this.status = status;
     }
 
-    abstract void takeFood(Furnace furnace);
+    abstract void takeFood(Furnace furnace, ObjectOutputStream os) throws IOException;
 
 
 

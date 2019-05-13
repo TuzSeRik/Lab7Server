@@ -1,5 +1,7 @@
 package Background;
 
+import java.io.ObjectOutputStream;
+
 public class Human extends Person {
     private String name;
 
@@ -13,7 +15,7 @@ public class Human extends Person {
     }
 
     @Override
-    public void takeFood(Furnace furnace){
+    public void takeFood(Furnace furnace, ObjectOutputStream os){
         throw new RuntimeException();
     }
 }
