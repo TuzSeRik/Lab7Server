@@ -2,17 +2,27 @@ import Background.Furnace;
 import Background.Human;
 import Background.Shorty;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.channels.SocketChannel;
 
 public class Simulation {
     private Shorty x = null;
     private Shorty y = null;
     private Shorty z = null;
+    Collection collection;
+    Furnace furnace;
+    Human human;
 
-    Simulation(Collection collection, SocketChannel channel){
-        Furnace furnace = new Furnace("Картошка", 100);
-        Human human = new Human("Human", 100, 100, "Rubaha", 100);
-        while (furnace.getQuantity() > 0){
+    Simulation(Collection collection) {
+        furnace = new Furnace("Картошка", 100);
+        human = new Human("Human", 100, 100, "Rubaha", 100);
+    }
+
+
+
+    void simulate(ObjectOutputStream os) throws IOException {
+        while (furnace.getQuantity() > 0) {
             try {
                 while (x == null) {
                     x = collection.getRandomMember();
@@ -21,14 +31,15 @@ public class Simulation {
                     y = collection.getRandomMember();
                 }
                 x.Beat(y);
-            } catch (NullPointerException e){
-                System.err.println("Коллекция пуста, драться некому!");
+            } catch (NullPointerException e) {
+                os.writeUTF("Коллекция пуста, драться некому!");
                 break;
             }
-            if(x.getIsWinner()){
+
+            if (x.getIsWinner()) {
                 x.takeFood(furnace);
-                for (int i = 0; i < 2; i++){
-                    while (z==null) {
+                for (int i = 0; i < 2; i++) {
+                    while (z == null) {
                         z = collection.getRandomMember();
                     }
                     z.Buzz(x);
@@ -36,6 +47,7 @@ public class Simulation {
             }
             Collection.Rest();
         }
+
         try {
             human.takeFood(furnace);
         } catch (Exception e) {
