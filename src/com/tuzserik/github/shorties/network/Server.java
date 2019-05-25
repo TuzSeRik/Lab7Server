@@ -1,5 +1,7 @@
 package com.tuzserik.github.shorties.network;
 
+import com.tuzserik.github.shorties.background.Collection;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;

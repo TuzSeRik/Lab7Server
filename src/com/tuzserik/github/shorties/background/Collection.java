@@ -1,9 +1,7 @@
-package com.tuzserik.github.shorties.network;
+package com.tuzserik.github.shorties.background;
 
 import com.tuzserik.github.shorties.serializing.CSV;
 import com.tuzserik.github.shorties.serializing.JSON;
-import com.tuzserik.github.shorties.background.Shorty;
-import com.tuzserik.github.shorties.background.Status;
 import net.sf.jsefa.DeserializationException;
 import java.io.*;
 import java.text.DateFormat;
