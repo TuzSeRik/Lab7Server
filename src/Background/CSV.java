@@ -16,7 +16,7 @@ public class CSV {
         Shorty shorty = null;
         deserializer.open(reader);
         while (deserializer.hasNext()){
-        shorty = deserializer.next();
+            shorty = deserializer.next();
         }
         deserializer.close(true);
         return shorty;
