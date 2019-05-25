@@ -1,5 +1,8 @@
 package com.tuzserik.github.shorties.network;
 
+import com.tuzserik.github.shorties.background.Collection;
+import com.tuzserik.github.shorties.background.Simulation;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
