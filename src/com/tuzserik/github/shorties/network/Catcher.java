@@ -1,4 +1,4 @@
-package com.tuzserik.github.shorties;
+package com.tuzserik.github.shorties.network;
 
 import java.io.*;
 import java.net.Socket;

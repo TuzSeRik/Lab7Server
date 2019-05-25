@@ -1,4 +1,4 @@
-package com.tuzserik.github.shorties;
+package com.tuzserik.github.shorties.network;
 
 import com.tuzserik.github.shorties.serializing.CSV;
 import com.tuzserik.github.shorties.serializing.JSON;
@@ -113,7 +113,7 @@ class Collection {
         void initialise(String key){
             try {
                 collection = new PriorityQueue<>();
-                Scanner reader = new Scanner(new File("com/tuzserik/github/shorties/collectionStorage.csv"));
+                Scanner reader = new Scanner(new File("com/tuzserik/github/shorties/network/collectionStorage.csv"));
                 while (reader.hasNext()){
                     Date date = new Date();
                     String current = reader.nextLine();
@@ -192,7 +192,7 @@ class Collection {
 
         void save(){
             try{
-                BufferedOutputStream bfos=new BufferedOutputStream(new FileOutputStream("com/tuzserik/github/shorties/collectionStorage.csv", true));
+                BufferedOutputStream bfos=new BufferedOutputStream(new FileOutputStream("com/tuzserik/github/shorties/network/collectionStorage.csv", true));
                 for (Shorty x : collection) {
                     byte[] b = CSV.toCSV(x).getBytes();
                     bfos.write(b);
