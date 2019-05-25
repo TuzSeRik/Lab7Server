@@ -1,4 +1,4 @@
-package Background;
+package com.tuzserik.github.shorties.background;
 
 import java.io.ObjectOutputStream;
 

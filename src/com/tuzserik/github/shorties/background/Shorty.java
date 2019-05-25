@@ -1,4 +1,4 @@
-package Background;
+package com.tuzserik.github.shorties.background;
 
 import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;

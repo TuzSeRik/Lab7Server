@@ -1,5 +1,6 @@
-package Background;
+package com.tuzserik.github.shorties.serializing;
 
+import com.tuzserik.github.shorties.background.Shorty;
 import net.sf.jsefa.Deserializer;
 import net.sf.jsefa.Serializer;
 import net.sf.jsefa.csv.CsvIOFactory;
@@ -16,7 +17,7 @@ public class CSV {
         Shorty shorty = null;
         deserializer.open(reader);
         while (deserializer.hasNext()){
-        shorty = deserializer.next();
+            shorty = deserializer.next();
         }
         deserializer.close(true);
         return shorty;

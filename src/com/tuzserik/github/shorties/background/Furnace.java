@@ -1,4 +1,4 @@
-package Background;
+package com.tuzserik.github.shorties.background;
 
 public class Furnace {
     private Food food;

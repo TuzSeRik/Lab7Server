@@ -1,6 +1,8 @@
-import Background.Furnace;
-import Background.Human;
-import Background.Shorty;
+package com.tuzserik.github.shorties;
+
+import com.tuzserik.github.shorties.background.Furnace;
+import com.tuzserik.github.shorties.background.Human;
+import com.tuzserik.github.shorties.background.Shorty;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
