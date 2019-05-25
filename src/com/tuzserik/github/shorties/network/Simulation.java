@@ -1,4 +1,4 @@
-package com.tuzserik.github.shorties;
+package com.tuzserik.github.shorties.network;
 
 import com.tuzserik.github.shorties.background.Furnace;
 import com.tuzserik.github.shorties.background.Human;

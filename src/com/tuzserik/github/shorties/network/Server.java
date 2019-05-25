@@ -1,10 +1,10 @@
-package com.tuzserik.github.shorties;
+package com.tuzserik.github.shorties.network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 
-public class Main {
+public class Server {
     public static void main(String[] args){
         ServerSocketChannel serverSocket = null;
         Collection collection = new Collection();
