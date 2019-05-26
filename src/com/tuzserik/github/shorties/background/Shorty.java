@@ -1,110 +1,152 @@
 package com.tuzserik.github.shorties.background;
 
+import static java.lang.Math.random;
 import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;
-
-import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Date;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 @CsvDataType()
 public class Shorty extends Person implements Comparable {
-    @CsvField(pos = 2)
-    private Integer power;
-    @CsvField(pos = 3)
-    private Date date;
-    private boolean isWinner;
-    private int foodCount;
+
     @CsvField(pos = 1)
     private String name;
-    @CsvField(pos=4)
-    private String CN;
-    @CsvField(pos=5)
-    private int CHP;
+    @CsvField(pos = 2)
+    private int strength;
+    @CsvField(pos = 3)
+    private int perception;
+    @CsvField(pos = 4)
+    private int endurance;
+    @CsvField(pos = 5)
+    private int charisma;
+    @CsvField(pos = 6)
+    private int intelligence;
+    @CsvField(pos = 7)
+    private int agility;
+    @CsvField(pos = 8)
+    private int luck;
+    @CsvField(pos = 9)
+    private double priority;
+    @CsvField(pos = 10)
+    private LocalDateTime creationDate;
 
-    private String getName(){
+    private double power;
+    private double accuracy;
+    private double hp;
+    private double confusionChance;
+    private double regenRate;
+    private double evasionChance;
+    private double criticalChance;
+
+    private ObjectOutputStream output;
+
+    private int foodCount = 0;
+    private boolean isBeaten = false;
+
+
+
+    Shorty(){}
+    Shorty(String name, int strength, int perception, int endurance,
+           int charisma, int intelligence, int agility, int luck,
+           ObjectOutputStream output, boolean isCreation){
+        this.name = name;
+        this.strength = strength;
+        this.perception = perception;
+        this.endurance = endurance;
+        this.charisma = charisma;
+        this.intelligence = intelligence;
+        this.agility = agility;
+        this.luck = luck;
+
+        priority = agility+2*luck*random()/10-luck*random()/10;
+        power = 2.5*strength;
+        accuracy = 0.45+0.05*perception;
+        hp = 10*endurance;
+        confusionChance = 0.02*charisma;
+        regenRate = 5*intelligence;
+        evasionChance = 0.02*agility;
+        criticalChance = 0.025*luck;
+
+        this.output = output;
+
+        if(isCreation){
+            creationDate = LocalDateTime.now();
+        }
+    }
+
+
+
+    String getName(){
         return  this.name;
     }
-
-    public Shorty(){}
-
-    Shorty(String name, int height, int weight, String CName, Integer hp){
-        super(height, CName, hp);
-        power = weight*height;
-        this.name = name;
-        CN = CName;
-        CHP = hp;
+    double getConfusionChance(){return this.confusionChance;}
+    double getEvasionChance(){return evasionChance;}
+    LocalDateTime getDate() {
+        return creationDate;
     }
-
-    public void dontWorryImDressed(){
-        cloth = new Cloth(CN,CHP);
-    }
-
-    public void Beat(Shorty shorty, ObjectOutputStream os) throws IOException{
-        isWinner = false;
-        if(shorty.getStatus()!= Status.REPAIRING){
-            shorty.recieveDamage();
-            if (shorty.getStatus() != Status.NONE) shorty.recieveDamage();
-            if (shorty.cloth.getIsBroke()) {
-                Laugh(shorty, os);
-                os.writeUTF(this.getName()+" засмеялся над "+shorty.getName());
-            }
-        }
-       os.writeUTF(this.getName()+" ударил "+shorty.getName());
-    }
-
-    private void recieveDamage() throws NullPointerException{
-        cloth.Break();
-    }
-
-    public void Laugh(Human human, ObjectOutputStream os) throws IOException{
-        os.writeUTF(this.getName()+" засмеялся над "+human.getName());
-    }
-
-    private void Laugh(Shorty shorty, ObjectOutputStream os) throws IOException{
-        os.writeUTF(shorty.getName()+" начал ремонтировать "+shorty.cloth.getName());
-        shorty.setStatus(Status.REPAIRING);
-        this.setStatus(Status.LAUGHING);
-        isWinner = true;
-    }
-
-    public void Buzz(Shorty shorty, ObjectOutputStream os) throws  IOException{
-        if (this.getStatus() != Status.REPAIRING) {
-            this.setStatus(Status.BUZZING);
-            os.writeUTF(this.getName()+" одобрительно загудел в сторону "+shorty.getName());
-        }
-    }
-
-    public boolean getIsWinner(){
-        return isWinner;
-    }
-
-    public int getPower(){
-        return power;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date){
-        this.date = date;
-    }
-
-    public int getFoodCount(){
+    int getFoodCount(){
         return foodCount;
     }
-
-    @Override
-    public void takeFood(Furnace furnace, ObjectOutputStream os) throws IOException{
-        furnace.foodTaken();
-        foodCount++;
-        os.writeUTF(this.getName()+" взял "+furnace.getName());
+    public boolean isBeaten() {
+        return isBeaten;
     }
 
     @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+
+
+    void takeFood(Furnace furnace) throws IOException {
+        furnace.foodTaken();
+        foodCount++;
+        output.writeUTF(this.getName()+" взял "+furnace.getName());
+    }
+
+    boolean beat(Shorty shorty) throws IOException {
+        if (!shorty.isBeaten()) {
+            if (!(shorty.getConfusionChance() >= random())) {
+                if (accuracy >= random()) {
+                    if (!(shorty.getEvasionChance() >= random())) {
+                        if (criticalChance >= random()) {
+                            shorty.receiveDamage(2 * power);
+                            output.writeUTF(this.getName() + " ударил по " + shorty.getName() + " с двойной силой!");
+                        } else {
+                            shorty.receiveDamage(power);
+                            output.writeUTF(this.getName() + " ударил по " + shorty.getName() + ".");
+                        }
+                    } else output.writeUTF(shorty.getName() + " уклонился от " + this.getName() + ".");
+                } else output.writeUTF(this.getName() + " промахнулся по " + shorty.getName() + ".");
+            } else {
+                output.writeUTF(shorty.getName() + " отговорил " + this.getName() + " бить.");
+                return false;
+            }
+            return true;
+        }   else return false;
+    }
+
+    private void receiveDamage(double power){
+        this.hp-=power;
+        if (hp <= 0){
+            hp = 0;
+        }
+        isBeaten = true;
+    }
+
+    void heal() throws IOException {
+        if(isBeaten && hp<10*endurance){
+            hp+=regenRate;
+        }
+        if(isBeaten && hp==10*endurance){
+            isBeaten = false;
+            output.writeUTF(this.getName()+" излечился!");
+        }
+    }
+
+    public void laugh(Human human) throws IOException{
+        output.writeUTF(this.getName()+" засмеялся над "+human.getName()+".");
     }
 }
 //+
