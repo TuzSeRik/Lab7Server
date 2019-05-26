@@ -8,17 +8,29 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.concurrent.PriorityBlockingQueue;
 
 class Collection {
 
-    private static PriorityQueue<Shorty> collection = new PriorityQueue<>();
+    public PriorityBlockingQueue<Shorty> getQueue() {
+        return collection;
+    }
+
+    void addToQueue(Shorty shorty){
+        reservecollection.add(shorty);
+    }
+
+    private static PriorityBlockingQueue<Shorty> collection = new PriorityBlockingQueue<>();
+    private static PriorityBlockingQueue<Shorty> reservecollection = new PriorityBlockingQueue<>();
     Collection.Commands commands;
 
     Collection(){
         commands = new Collection.Commands();
         commands.initialise("");
+
+        furnace = new Furnace("Картошка", 100);
+        human = new Human("Human");
     }
 
     static void Rest(){
@@ -102,6 +114,7 @@ class Collection {
         }
         while (x[res]!=null);
         return null;
+
     }
 
 

@@ -1,28 +1,59 @@
 package com.tuzserik.github.shorties.background;
 
-import com.tuzserik.github.shorties.background.Collection;
-import com.tuzserik.github.shorties.background.Furnace;
-import com.tuzserik.github.shorties.background.Human;
-import com.tuzserik.github.shorties.background.Shorty;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 class Simulation {
-    private Shorty x = null;
-    private Shorty y = null;
-    private Shorty z = null;
+    private Shorty veryPrevious = null;
+    private Shorty previous = null;
+    private Shorty current = null;
+    private Shorty reserve = null;
     private Collection collection;
     private Furnace furnace;
     private Human human;
+    private ObjectOutputStream output;
 
-    Simulation(Collection collection) {
-        furnace = new Furnace("Картошка", 100);
-        human = new Human("Human", 100, 100, "Rubaha", 100);
+    Simulation(Collection collection, Furnace furnace, Human human, ObjectOutputStream output) throws IOException{
+        this.collection = collection;
+        this.furnace = furnace;
+        this.human = human;
+        this.output = output;
+
+        simulate();
+    }
+
+    private void simulate() throws IOException {
+        while (furnace.getQuantity() > 0){
+            veryPrevious = collection.getQueue().poll();
+            previous = collection.getQueue().poll();
+            if (Math.random()>0.5){
+                veryPrevious.takeFood(furnace);
+
+            } else if (!previous.isBeaten()) veryPrevious.beat(previous);
+                else  veryPrevious.takeFood(furnace);
+            while (!collection.getQueue().isEmpty()){
+                current = collection.getQueue().poll();
+                if (Math.random()>0.5){
+                    if (!previous.beat(veryPrevious)){
+                        if (!previous.beat(current)){
+                            reserve = previous;
+                            previous = veryPrevious;
+                            veryPrevious = reserve;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
+}
+//++
 
-    void simulate(ObjectOutputStream os) throws IOException {
+
+
+
+/*{  void simulate(ObjectOutputStream os) throws IOException {
         while (furnace.getQuantity() > 0) {
             try {
                 while (x == null) {
@@ -58,6 +89,4 @@ class Simulation {
                 os.writeUTF("Да не работает же!");
             }
         }
-    }
-}
-//++
+    }}*/

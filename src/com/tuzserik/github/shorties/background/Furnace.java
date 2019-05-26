@@ -1,22 +1,21 @@
 package com.tuzserik.github.shorties.background;
 
-public class Furnace {
+class Furnace {
     private Food food;
 
-    public Furnace(String name, int quantity) {
+    Furnace(String name, int quantity) {
         food = new Food(name, quantity);
+    }
+
+    int getQuantity(){
+        return food.quantity;
+    }
+    String getName(){
+        return food.name;
     }
 
     void foodTaken(){
         food.decreaseQuantity();
-    }
-
-    public int getQuantity(){
-        return food.quantity;
-    }
-
-    String getName(){
-        return food.name;
     }
 
 
