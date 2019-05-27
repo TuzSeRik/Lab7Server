@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="Lab6Server">
-    <output-path>$PROJECT_DIR$/out/artifacts/Lab6Server</output-path>
-    <root id="archive" name="Lab6Server.jar">
+  <artifact type="jar" name="Lab7Server">
+    <output-path>$PROJECT_DIR$/out/artifacts/Lab7Server</output-path>
+    <root id="archive" name="Lab7Server.jar">
       <element id="module-output" name="Lab7Server" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../gson.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../jsefa.jar" path-in-jar="/" />
