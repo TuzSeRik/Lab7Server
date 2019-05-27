@@ -1,13 +1,11 @@
 package com.tuzserik.github.shorties.network;
 
 import com.tuzserik.github.shorties.background.Collection;
-import com.tuzserik.github.shorties.background.Simulation;
-
 import java.io.*;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class Catcher extends Thread {
@@ -16,10 +14,11 @@ public class Catcher extends Thread {
     private ObjectOutputStream to;
     private Collection collection;
 
-    Catcher(SocketChannel socket, Collection collection) throws IOException{
+    Catcher(SocketChannel socket, Collection collection, ObjectOutputStream output) throws IOException{
         this.collection = collection;
         Socket socket1 = socket.socket();
-        to = new ObjectOutputStream(socket1.getOutputStream());
+        output = new ObjectOutputStream(socket1.getOutputStream());
+        to = output;
         from = new ObjectInputStream(socket1.getInputStream());
         try
         {
@@ -63,8 +62,7 @@ public class Catcher extends Thread {
                 }
 
                 if (input.contains("start")) {
-                    Simulation simulation = new Simulation(collection);
-                    simulation.simulate(to);
+                    collection.commands.simulate();
                     to.flush();
                 }
 
@@ -81,12 +79,12 @@ public class Catcher extends Thread {
                     to.flush();
                 }
 
-                if (input.contains("add_if_max ")) {
+/*                if (input.contains("add_if_max ")) {
                     String[] strings = input.split(" ");
                     collection.commands.addIfMax(strings[1]);
                     to.writeUTF("Элемент успешно записан(или не записан)!");
                     to.flush();
-                }
+                }*/
 
                 if (input.contains("remove ")) {
                     String[] strings = input.split(" ");

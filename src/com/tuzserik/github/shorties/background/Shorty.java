@@ -46,7 +46,6 @@ public class Shorty extends Person implements Comparable {
 
 
 
-    Shorty(){}
     Shorty(String name, int strength, int perception, int endurance,
            int charisma, int intelligence, int agility, int luck,
            ObjectOutputStream output, boolean isCreation){
@@ -77,24 +76,25 @@ public class Shorty extends Person implements Comparable {
 
 
 
-    String getName(){
-        return  this.name;
+    private String getName(){
+        return this.name;
     }
-    double getConfusionChance(){return this.confusionChance;}
-    double getEvasionChance(){return evasionChance;}
+    private double getConfusionChance(){return this.confusionChance;}
+    private double getEvasionChance(){return evasionChance;}
     LocalDateTime getDate() {
         return creationDate;
     }
+    void setDate(LocalDateTime date) {this.creationDate = date;}
     int getFoodCount(){
         return foodCount;
     }
-    public boolean isBeaten() {
+    boolean isBeaten() {
         return isBeaten;
     }
 
     @Override
     public int compareTo(Object o) {
-        return 0;
+        return Integer.compare(this.getFoodCount(), ((Shorty) o).getFoodCount());
     }
 
 
@@ -145,7 +145,7 @@ public class Shorty extends Person implements Comparable {
         }
     }
 
-    public void laugh(Human human) throws IOException{
+    void laugh(Human human) throws IOException{
         output.writeUTF(this.getName()+" засмеялся над "+human.getName()+".");
     }
 }

@@ -1,20 +1,22 @@
 package com.tuzserik.github.shorties.background;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.util.concurrent.PriorityBlockingQueue;
 
 class Simulation {
-    private Shorty veryPrevious = null;
-    private Shorty previous = null;
-    private Shorty current = null;
-    private Shorty reserve = null;
-    private Collection collection;
+    private PriorityBlockingQueue<Shorty> collection;
+    private PriorityBlockingQueue<Shorty> recollection;
+    private Collection.Commands commands;
     private Furnace furnace;
     private Human human;
     private ObjectOutputStream output;
 
-    Simulation(Collection collection, Furnace furnace, Human human, ObjectOutputStream output) throws IOException{
+
+    Simulation(Collection.Commands commands,PriorityBlockingQueue<Shorty> collection, PriorityBlockingQueue<Shorty> recollection, Furnace furnace, Human human, ObjectOutputStream output) throws IOException{
+        this.commands = commands;
         this.collection = collection;
+        this.recollection = recollection;
         this.furnace = furnace;
         this.human = human;
         this.output = output;
@@ -23,70 +25,44 @@ class Simulation {
     }
 
     private void simulate() throws IOException {
+        output.writeUTF("Да начнется битва!");
         while (furnace.getQuantity() > 0){
-            veryPrevious = collection.getQueue().poll();
-            previous = collection.getQueue().poll();
+            Shorty veryPrevious = collection.poll();
+            Shorty previous = collection.poll();
+            Shorty current;
             if (Math.random()>0.5){
                 veryPrevious.takeFood(furnace);
-
             } else if (!previous.isBeaten()) veryPrevious.beat(previous);
                 else  veryPrevious.takeFood(furnace);
-            while (!collection.getQueue().isEmpty()){
-                current = collection.getQueue().poll();
+            while (!collection.isEmpty()){
+                current = collection.poll();
                 if (Math.random()>0.5){
                     if (!previous.beat(veryPrevious)){
                         if (!previous.beat(current)){
-                            reserve = previous;
+                            if (veryPrevious.isBeaten()) veryPrevious.heal();
+                            Shorty reserve = previous;
                             previous = veryPrevious;
                             veryPrevious = reserve;
                         }
                     }
                 }
+                recollection.add(veryPrevious);
+                veryPrevious = previous;
+                previous = current;
             }
+            if(veryPrevious.isBeaten()){
+                veryPrevious.heal();
+                Shorty reserve = veryPrevious;
+                veryPrevious = previous;
+                previous = reserve;
+            } else if(!previous.isBeaten())previous.beat(veryPrevious);
+                else previous.heal();
+            recollection.add(veryPrevious);
+            recollection.add(previous);
+            collection = recollection;
+            recollection.clear();
         }
+        commands.getMaxShorty().laugh(human);
     }
-
-
 }
 //++
-
-
-
-
-/*{  void simulate(ObjectOutputStream os) throws IOException {
-        while (furnace.getQuantity() > 0) {
-            try {
-                while (x == null) {
-                    x = collection.getRandomMember();
-                }
-                while (y == null) {
-                    y = collection.getRandomMember();
-                }
-                x.Beat(y, os);
-            } catch (NullPointerException e) {
-                os.writeUTF("Коллекция пуста, драться некому!");
-                break;
-            }
-
-            if (x.getIsWinner()) {
-                x.takeFood(furnace, os);
-                for (int i = 0; i < 2; i++) {
-                    while (z == null) {
-                        z = collection.getRandomMember();
-                    }
-                    z.Buzz(x, os);
-                }
-            }
-            Collection.Rest();
-        }
-
-        try {
-            human.takeFood(furnace, os);
-        } catch (Exception e) {
-            try {
-                collection.getBest().Laugh(human, os);
-            } catch (NullPointerException ex) {
-                os.writeUTF("Да не работает же!");
-            }
-        }
-    }}*/

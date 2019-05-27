@@ -4,133 +4,57 @@ import com.tuzserik.github.shorties.serializing.CSV;
 import com.tuzserik.github.shorties.serializing.JSON;
 import net.sf.jsefa.DeserializationException;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Scanner;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.Iterator;
+import java.util.Comparator;
+import java.util.Scanner;
 
-class Collection {
 
-    public PriorityBlockingQueue<Shorty> getQueue() {
-        return collection;
-    }
-
-    void addToQueue(Shorty shorty){
-        reservecollection.add(shorty);
-    }
-
+@SuppressWarnings("OptionalGetWithoutIsPresent")
+public class Collection {
     private static PriorityBlockingQueue<Shorty> collection = new PriorityBlockingQueue<>();
-    private static PriorityBlockingQueue<Shorty> reservecollection = new PriorityBlockingQueue<>();
-    Collection.Commands commands;
+    private static PriorityBlockingQueue<Shorty> recollection = new PriorityBlockingQueue<>();
+    public Commands commands = new Commands();
+    private Furnace furnace = new Furnace("Картошка", 100);
+    private Human human = new Human("Human");
+    private ObjectOutputStream output;
 
-    Collection(){
-        commands = new Collection.Commands();
+    public Collection(ObjectOutputStream output){
+        this.output = output;
         commands.initialise("");
-
-        furnace = new Furnace("Картошка", 100);
-        human = new Human("Human");
-    }
-
-    static void Rest(){
-        for (Shorty x : collection) {
-            if (x.getStatus() == Status.REPAIRING) x.repairCloth();
-            if (x.getStatus() != Status.NONE || x.getStatus() != Status.REPAIRING) {
-                x.setStatus(Status.NONE);
-            }
-        }
-    }
-
-    Shorty getBest(){
-        Shorty best = new Shorty();
-        for (Shorty x : collection) {
-            if (x.getFoodCount() > best.getFoodCount()) {
-                best = x;
-            }
-        }
-        return best;
-    }
-
-    private float getMax(){
-        float max = 0;
-        while (collection.iterator().hasNext()){
-            Shorty x = collection.iterator().next();
-            if(x.getPower()>max){
-                max = x.getPower();
-            }
-        }
-        return max;
     }
 
     private String iDate(){
         final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
+        LocalDateTime date = LocalDateTime.now();
         for (Shorty x : collection) {
-            if (x.getDate().before(date)) {
+            if (x.getDate().isBefore(date)) {
                 date = x.getDate();
             }
         }
         return sdf.format(date);
     }
 
-    Shorty getRandomMember(){
-        int it = 0;
-        Shorty [] x = new Shorty[collection.size()];
-        for (Shorty shorty : collection) {
-            x[it] = shorty;
-            it++;
-        }
-        float min = Float.MIN_VALUE;
-        float max = 0;
-        int c = 2;
-        float comp;
-        int res;
-
-        for (Shorty shorty : x) {
-            if (shorty.getHeight() > max) {
-                max = shorty.getHeight();
-            }
-            if (shorty.getHeight() < min) {
-                min = shorty.getHeight();
-            }
-        }
-        while (c>0){
-            comp = (float) Math.random()*max;
-            for(int i = 0; i<x.length;i++){
-                if (x[i]!=null){
-                    if (x[i].getHeight()<comp){
-                        x[i] = null;
-                    }
-                }
-            }
-            c--;
-        }
-        do{
-            res = (int)Math.round(Math.random()*(x.length-1));
-            if(x[res]!=null){
-                return x[res];
-            }
-        }
-        while (x[res]!=null);
-        return null;
-
-    }
 
 
 
     public class Commands {
+        private Comparator<Shorty> food = Comparator.comparingInt(Shorty::getFoodCount);
+        Shorty getMaxShorty(){
+            return collection.stream().max(food).get();
+        }
 
-        void initialise(String key){
+        public void initialise(String key){
             try {
-                collection = new PriorityQueue<>();
                 Scanner reader = new Scanner(new File("com/tuzserik/github/shorties/network/collectionStorage.csv"));
                 while (reader.hasNext()){
-                    Date date = new Date();
+                    LocalDateTime date = LocalDateTime.now();
                     String current = reader.nextLine();
                     if(!key.equals("-l")){
                          CSV.fromCSV(current).setDate(date);
-                         CSV.fromCSV(current).dontWorryImDressed();
                     }
                     collection.add(CSV.fromCSV(current));
                 }
@@ -143,11 +67,11 @@ class Collection {
             }
         }
 
-        void load(){
+        public void load(){
             initialise("-l");
         }
 
-        void add(String jsonObject){
+        public void add(String jsonObject){
             try{
                 if(JSON.fromJSON(jsonObject).getDate()==null){
                     throw new NullPointerException();
@@ -159,26 +83,15 @@ class Collection {
             }
         }
 
-        void addIfMax(String jsonObject){
-            try {
-                if (JSON.fromJSON(jsonObject).getPower() > getMax()) {
-                    add(jsonObject);
-                }
-            }
-            catch (NullPointerException e){
-                System.err.println("Неправильно задан объект!");
-            }
-        }
-
-        void remove(String jsonObject){
+        public void remove(String jsonObject){
             collection.remove(JSON.fromJSON(jsonObject));
         }
 
-        void removeLast() {
+        public void removeLast() {
             int i = collection.size();
             try {
                 if (i == 0) {
-                    throw new Exception("");
+                    throw new Exception();
                 } else {
                     for (Iterator<Shorty> iterator = collection.iterator(); iterator.hasNext(); ) {
                         iterator.next();
@@ -193,15 +106,15 @@ class Collection {
             }
         }
 
-        String show(){
+        public String show(){
             return collection.toString();
         }
 
-        String info(){
+        public String info(){
             return ("Shorty"+"/n"+collection.size()+"/n"+iDate());
         }
 
-        void save(){
+        public void save(){
             try{
                 BufferedOutputStream bfos=new BufferedOutputStream(new FileOutputStream("com/tuzserik/github/shorties/network/collectionStorage.csv", true));
                 for (Shorty x : collection) {
@@ -213,7 +126,10 @@ class Collection {
             catch (IOException e){
                 e.printStackTrace();
             }
-            System.out.println("Let the battle begins!");
+        }
+
+        public void simulate()throws IOException{
+            new Simulation(commands, collection, recollection, furnace, human, output);
         }
     }
 }

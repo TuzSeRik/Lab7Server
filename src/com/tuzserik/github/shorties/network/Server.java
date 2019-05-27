@@ -3,13 +3,15 @@ package com.tuzserik.github.shorties.network;
 import com.tuzserik.github.shorties.background.Collection;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 
 public class Server {
     public static void main(String[] args){
         ServerSocketChannel serverSocket = null;
-        Collection collection = new Collection();
+        ObjectOutputStream output = null;
+        Collection collection = new Collection(output);
 
         try {
             serverSocket = ServerSocketChannel.open();
@@ -23,7 +25,7 @@ public class Server {
 
         while (true) {
             try {
-                new Catcher(serverSocket.accept(), collection);
+                new Catcher(serverSocket.accept(), collection, output);
             } catch (IOException e){
                 e.printStackTrace();
                 System.exit(-2);
