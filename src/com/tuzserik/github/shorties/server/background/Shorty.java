@@ -1,4 +1,4 @@
-package com.tuzserik.github.shorties.background;
+package com.tuzserik.github.shorties.server.background;
 
 import static java.lang.Math.random;
 import net.sf.jsefa.csv.annotation.CsvDataType;

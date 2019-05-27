@@ -1,7 +1,7 @@
-package com.tuzserik.github.shorties.background;
+package com.tuzserik.github.shorties.server.background;
 
-import com.tuzserik.github.shorties.serializing.CSV;
-import com.tuzserik.github.shorties.serializing.JSON;
+import com.tuzserik.github.shorties.server.serializing.CSV;
+import com.tuzserik.github.shorties.server.serializing.JSON;
 import net.sf.jsefa.DeserializationException;
 import java.io.*;
 import java.time.LocalDateTime;
@@ -49,7 +49,7 @@ public class Collection {
 
         public void initialise(String key){
             try {
-                Scanner reader = new Scanner(new File("com/tuzserik/github/shorties/network/collectionStorage.csv"));
+                Scanner reader = new Scanner(new File("com/tuzserik/github/shorties/server/server/network/collectionStorage.csv"));
                 while (reader.hasNext()){
                     LocalDateTime date = LocalDateTime.now();
                     String current = reader.nextLine();
@@ -116,7 +116,7 @@ public class Collection {
 
         public void save(){
             try{
-                BufferedOutputStream bfos=new BufferedOutputStream(new FileOutputStream("com/tuzserik/github/shorties/network/collectionStorage.csv", true));
+                BufferedOutputStream bfos=new BufferedOutputStream(new FileOutputStream("com/tuzserik/github/shorties/server/server/network/collectionStorage.csv", true));
                 for (Shorty x : collection) {
                     byte[] b = CSV.toCSV(x).getBytes();
                     bfos.write(b);

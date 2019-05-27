@@ -1,6 +1,6 @@
-package com.tuzserik.github.shorties.network;
+package com.tuzserik.github.shorties.server.network;
 
-import com.tuzserik.github.shorties.background.Collection;
+import com.tuzserik.github.shorties.server.background.Collection;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

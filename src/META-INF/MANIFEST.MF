@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: com.tuzserik.github.shorties.network.Server
+Main-Class: com.tuzserik.github.shorties.server.network.Server

@@ -1,4 +1,4 @@
-package com.tuzserik.github.shorties.background;
+package com.tuzserik.github.shorties.server.background;
 
 import java.io.ObjectOutputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.tuzserik.github.shorties.background;
+package com.tuzserik.github.shorties.server.background;
 
 class Human extends Person {
     private String name;

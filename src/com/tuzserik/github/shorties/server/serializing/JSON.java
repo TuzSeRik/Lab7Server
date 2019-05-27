@@ -1,7 +1,7 @@
-package com.tuzserik.github.shorties.serializing;
+package com.tuzserik.github.shorties.server.serializing;
 
 import com.google.gson.Gson;
-import com.tuzserik.github.shorties.background.Shorty;
+import com.tuzserik.github.shorties.server.background.Shorty;
 
 public class JSON {
     private static Gson gson = new Gson();
